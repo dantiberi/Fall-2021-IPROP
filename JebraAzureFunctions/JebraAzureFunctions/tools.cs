@@ -20,6 +20,12 @@ namespace JebraAzureFunctions
         {
             System.Diagnostics.Debug.WriteLine(s);
         }
+
+        /// <summary>
+        /// Coverts a SqlDataReader into a JSON object representing the query results.
+        /// </summary>
+        /// <param name="dataReader"></param>
+        /// <returns>A JSON string representing the query results.</returns>
         public static String SqlDatoToJson(SqlDataReader dataReader)
         {
             var dataTable = new DataTable();
@@ -29,6 +35,11 @@ namespace JebraAzureFunctions
             return JSONString;
         }
 
+        /// <summary>
+        /// Executes an async non-query command on the Azure sql database.
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns>True if the command was sent.</returns>
         public static async Task<bool> ExecuteNonQueryAsync(string command)
         {
             var str = Environment.GetEnvironmentVariable("SqlConnectionString");

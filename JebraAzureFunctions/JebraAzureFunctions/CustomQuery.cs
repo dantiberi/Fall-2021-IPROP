@@ -1,7 +1,9 @@
-using System.IO;
 using System;
+using System.Data.SqlClient;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using JebraAzureFunctions.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -11,48 +13,41 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
-using System.Data.SqlClient;
 
 namespace JebraAzureFunctions
 {
-    public static class GetQuestion
+    public static class CustomQuery
     {
-        [FunctionName("GetQuestion")]
-        [OpenApiOperation(operationId: "Run", tags: new[] { "Question Requests" })]
+        [FunctionName("CustomQuery")]
+        [OpenApiOperation(operationId: "Run", tags: new[] { "General Request" })]
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
-        [OpenApiParameter(name: "id", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The **id** parameter")]
+        [OpenApiRequestBodyAttribute(contentType: "string", bodyType: typeof(CustomNonQueryModel))]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "The OK response")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            //log.LogInformation("C# HTTP trigger function processed a request.");
-            //Console.WriteLine("GetQuestion Called!");
-
-            string id = req.Query["id"];
+            string command = req.Query["command"];
+            //string command = "";
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
-            id = id ?? data?.id;//Get id from url
+            command = command ?? data?.command;
 
             string responseMessage = "";
 
-            //I've tried so hard to make this into a method in another class (Tools)
-            //which could be easily called in a more clean/elegant way.
-            //I just can't get the async/await stuff to work properly.
-            //I spent an entire day on this. It's driving me insane!
-            //-Dan Tiberi 10/3/2021 10:11pm. Send help... :(
             var str = Environment.GetEnvironmentVariable("SqlConnectionString");
             using (SqlConnection conn = new SqlConnection(str))
             {
                 conn.Open();
-                var command = $"SELECT * FROM question WHERE id={id}";
 
                 using (SqlCommand cmd = new SqlCommand(command, conn))
                 {
                     SqlDataReader rows = await cmd.ExecuteReaderAsync();
                     responseMessage = Tools.SqlDatoToJson(rows);//Convert object to JSON.
                 }
+
+                conn.Close();
             }
             return new OkObjectResult(responseMessage);
         }
