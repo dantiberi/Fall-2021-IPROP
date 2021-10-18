@@ -1,5 +1,6 @@
 import React from "react";
-import styles from "./Page.module.scss"
+import pageStyles from "./Page.module.scss"
+import formStyles from "./Form.module.scss"
 
 import useForm from "hooks/useForm";
 
@@ -33,9 +34,9 @@ const Signup: React.FC = () => {
     );
 
     return (
-        <div className={styles.page}>
+        <div className={formStyles.form}>
             <h3>Sign up</h3>
-            <form className={styles.form} onSubmit={onFormSubmit}>
+            <form onSubmit={onFormSubmit}>
                 <label>
                     First Name: 
                     <input name="fname" value={formState.fname} placeholder="First name" type="text" onChange={onFormChange} />

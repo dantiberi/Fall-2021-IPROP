@@ -2,16 +2,42 @@
 
 .header {
     background-color: $dark-grey;
-    color: white;
-    left: 17px;
-    top: 11px;
     filter: drop-shadow(4px 4px 1px rgba(0, 0, 0, 0.25));
+
+    position: absolute;
+    width: calc(100% - 40px);
+    height: 106px;
+    margin: 20px;
+    padding-right: 120px;
+    padding-left: 80px;
+
+    border-radius: 15px;
 }
 
-.navlinks a:visited {
-    color: $green;
+.logo {
+    position: absolute;
+    width: 200px;
+    height: 100px;
+    margin-top: 45px;
+  }
+
+.menu{
+    position: absolute;
+    right: 20px;
+    justify-content: space-between;
 }
 
-.navlinks a {
+.menuButton {
     color: $light-grey;
+    font-size: 1.2em;
+    size: "18px";
+    margin-left: "38px";
+    a:hover {
+        background-color: $green;
+      }
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
 }

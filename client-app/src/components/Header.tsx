@@ -1,30 +1,68 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./Header.module.scss"
+import { ReactComponent as JebraSVG } from './assets/JebraLogov2Dark.svg';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import { Link as RouterLink } from "react-router-dom";
 
-const Header: React.FC = () => {
-    return (
-        <header className={styles.header}>
-            <h1>Jebra</h1>
-            <h2>Interactive Algebra Lessons</h2>
-            <nav>
-                <ul className={styles.navlinks}>
-                    <li>
-                        <Link to="/">Home</Link>
-                    </li>
-                    <li>
-                        <Link to="/options">Options</Link>
-                    </li>
-                    <li>
-                        <Link to="/login">Log in</Link>
-                    </li>
-                    <li>
-                        <Link to="/signup">Sign up</Link>
-                    </li>
-                </ul>
-            </nav>
-        </header>
-    );
-};
+const headersData = [
+    {
+      label: "Home",
+      href: "/",
+    },
+    {
+      label: "Options",
+      href: "/options",
+    },
+    {
+      label: "Login",
+      href: "/Login",
+    },
+    {
+      label: "Sign up",
+      href: "/signup",
+    },
+  ];
+  
+export default function Header() {
+  const displayDesktop = () => {
+    return <Toolbar className = {styles.toolbar}>
+        {JebraLogo}
+        <div className = {styles.menu}> {getMenuButtons()} </div>
+        </Toolbar>;
+  };
 
-export default Header;
+  const JebraLogo = (
+    <JebraSVG 
+        //viewBox="0 0 20 10"
+        className={styles.logo}
+    />
+  );
+  
+  const getMenuButtons = () => {
+    return headersData.map(({ label, href }) => {
+      return (
+        <Button className = {styles.menuButton}
+          {...{
+            key: label,
+            color: "inherit",
+            to: href,
+            component: RouterLink,
+          }}
+        >
+          {label}
+        </Button>
+      );
+    });
+  };
+
+  return (
+    <header>
+      <AppBar className ={styles.header}>{displayDesktop()}</AppBar>
+    </header>
+  );
+}

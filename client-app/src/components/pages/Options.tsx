@@ -1,8 +1,11 @@
 import React from "react";
+import styles from "./Page.module.scss"
 
 const Options: React.FC = () => {
     return (
-        <h3>Options</h3>
+        <div className={styles.content}>
+            <h3>Options</h3>
+        </div>
     );
 };
 

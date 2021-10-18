@@ -2,6 +2,7 @@ import Question from "components/Question";
 import React, { useState } from "react";
 import ProgressBar from "components/ProgressBar";
 import useForm from "hooks/useForm";
+import styles from "./Page.module.scss"
 
 interface ProgressFormState {
     answer: string,
@@ -34,7 +35,7 @@ const Home: React.FC = () => {
 
 
     return (
-        <div>
+        <div className={styles.content}>
             <h3>Home</h3>
             <ProgressBar value ={value}/>
             <Question id={4} />
