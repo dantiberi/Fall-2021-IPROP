@@ -35,6 +35,7 @@ namespace JebraAzureFunctions
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             //name = name ?? data?.name;
 
+            /*
             string responseMessage = "";
 
             //See GetQuestion for some context here.
@@ -54,7 +55,16 @@ namespace JebraAzureFunctions
                     SqlDataReader rows = await cmd.ExecuteReaderAsync();
                     responseMessage = Tools.SqlDatoToJson(rows);//Convert object to JSON.
                 }
-            }  
+            }
+            */
+
+            var command = @$"SELECT statistic.id, first_time_correct, total_retries, score  FROM statistic, statistic_join
+                WHERE statistic_join.user_id = {data?.user_id} 
+                    AND statistic_join.stage_id = {data?.stage_id} 
+                    AND statistic_join.course_id = {data?.course_id} 
+                    AND statistic.id = statistic_join.statistic_id
+                ";
+            string responseMessage = Tools.ExecuteQueryAsync(command).GetAwaiter().GetResult();
 
             return new OkObjectResult(responseMessage);
         }

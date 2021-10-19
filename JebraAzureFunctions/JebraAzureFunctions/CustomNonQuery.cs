@@ -34,7 +34,7 @@ namespace JebraAzureFunctions
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             command = command ?? data?.command;
 
-            Tools.ExecuteNonQueryAsync(command);
+            await Tools.ExecuteNonQueryAsync(command);
 
             string responseMessage = $"COMMAND: {command} \n Request Sent.";
 

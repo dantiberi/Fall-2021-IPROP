@@ -33,7 +33,6 @@ const Home: React.FC = () => {
         initialState
     );
 
-
     return (
         <div className={styles.content}>
             <h3>Home</h3>

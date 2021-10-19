@@ -37,7 +37,7 @@ namespace JebraAzureFunctions
             //name = name ?? data?.name;
 
             string command = $@"
-                ALTER TABLE [dbo].[statistic_join] CHECK CONSTRAINT user_id_fk_on_statistic_join
+                ALTER TABLE [dbo].[statistic_join] NOCHECK CONSTRAINT user_id_fk_on_statistic_join
                 ALTER TABLE [dbo].[statistic_join] NOCHECK CONSTRAINT course_id_fk_on_statistic_join
                 ALTER TABLE [dbo].[statistic_join] NOCHECK CONSTRAINT stage_id_fk_on_statistic_join
                 ALTER TABLE [dbo].[statistic_join] NOCHECK CONSTRAINT statistic_id_fk_on_statistic_join
