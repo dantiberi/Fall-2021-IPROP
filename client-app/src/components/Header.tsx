@@ -61,7 +61,7 @@ export default function Header() {
   };
 
   return (
-    <header>
+    <header >
       <AppBar className ={styles.header}>{displayDesktop()}</AppBar>
     </header>
   );

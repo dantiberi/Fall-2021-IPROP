@@ -10,6 +10,7 @@
     margin: 20px;
     padding-right: 120px;
     padding-left: 80px;
+    left: 0px;
 
     border-radius: 15px;
 }
@@ -29,8 +30,8 @@
 
 .menuButton {
     color: $light-grey;
-    font-size: 1.2em;
-    size: "18px";
+    font-size: 1.5em;
+    size: "30px";
     margin-left: "38px";
     a:hover {
         background-color: $green;
