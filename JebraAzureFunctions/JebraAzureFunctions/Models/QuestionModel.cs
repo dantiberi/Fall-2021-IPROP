@@ -18,8 +18,5 @@ namespace JebraAzureFunctions
 
         [JsonProperty]
         public float answer_b { get; set; }
-
-        [JsonProperty]
-        public string type { get; set; }
     }
 }

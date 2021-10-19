@@ -42,12 +42,11 @@ namespace JebraAzureFunctions
             //I just can't get the async/await stuff to work properly.
             //I spent an entire day on this. It's driving me insane!
             //-Dan Tiberi 10/3/2021 10:11pm. Send help... :(
-            /*
             var str = Environment.GetEnvironmentVariable("SqlConnectionString");
             using (SqlConnection conn = new SqlConnection(str))
             {
                 conn.Open();
-                var command = $"SELECT question.id, question.answer_a, question.answer_b, question.question, subject.subject_name FROM question, subject WHERE question.id={id} AND subject.id = question.subject_id";
+                var command = $"SELECT * FROM question WHERE id={id}";
 
                 using (SqlCommand cmd = new SqlCommand(command, conn))
                 {
@@ -55,11 +54,6 @@ namespace JebraAzureFunctions
                     responseMessage = Tools.SqlDatoToJson(rows);//Convert object to JSON.
                 }
             }
-            */
-
-            string command = $"SELECT question.id, question.answer_a, question.answer_b, question.question, subject.subject_name FROM question, subject WHERE question.id={id} AND subject.id = question.subject_id";
-
-            responseMessage = Tools.ExecuteQueryAsync(command).GetAwaiter().GetResult();
             return new OkObjectResult(responseMessage);
         }
     }

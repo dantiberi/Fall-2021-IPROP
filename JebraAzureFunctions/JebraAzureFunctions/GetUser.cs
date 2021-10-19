@@ -31,9 +31,25 @@ namespace JebraAzureFunctions
 
             string id = req.Query["id"];
 
-            var command = $"SELECT * FROM app_user WHERE id={id}";
-            string responseMessage = Tools.ExecuteQueryAsync(command).GetAwaiter().GetResult();
+            //string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            //dynamic data = JsonConvert.DeserializeObject(requestBody);
+            //id = id ?? data?.id;//Get id from url
 
+            string responseMessage = "";
+
+            //See GetQuestion for some context here.
+            var str = Environment.GetEnvironmentVariable("SqlConnectionString");
+            using (SqlConnection conn = new SqlConnection(str))
+            {
+                conn.Open();
+                var command = $"SELECT * FROM app_user WHERE id={id}";
+
+                using (SqlCommand cmd = new SqlCommand(command, conn))
+                {
+                    SqlDataReader rows = await cmd.ExecuteReaderAsync();
+                    responseMessage = Tools.SqlDatoToJson(rows);//Convert object to JSON.
+                }
+            }
             return new OkObjectResult(responseMessage);
         }
     }
