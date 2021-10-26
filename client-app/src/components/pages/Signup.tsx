@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 
 import pageStyles from "./Page.module.scss"
-
 import useForm from "hooks/useForm";
+import { IconButton, InputAdornment, TextField } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 interface SignupFormState {
     fname: string,
@@ -21,6 +22,10 @@ const Signup: React.FC = () => {
         password: "",
     };
 
+    const [visible, setVisible] = useState(false);
+    const toggleVisibility = () => {
+        setVisible(!visible);
+    };
     // a submit function that will execute upon form submission
     async function signupUserCallback() {
         // send "values" to database
@@ -37,30 +42,35 @@ const Signup: React.FC = () => {
         <div className={pageStyles.content}>
             <h3>Sign up</h3>
             <form onSubmit={onFormSubmit}>
-                <label>
-                    First Name: 
-                    <input name="fname" value={formState.fname} placeholder="First name" type="text" onChange={onFormChange} />
-                </label>
+                <div>
+                    <TextField name="fname" required label="First name" value={formState.fname} placeholder="First name" type="text" onChange={onFormChange} />
+                </div>
                 <br/>
-                <label>
-                    Last Name: 
-                    <input name="lname" value={formState.lname} placeholder="Last name" type="text" onChange={onFormChange} />
-                </label>
+                <div>
+                    <TextField name="lname" required label="Last name" value={formState.lname} placeholder="Last name" type="text" onChange={onFormChange} />
+                </div>
                 <br/>
-                <label>
-                    Email: 
-                    <input name="email" value={formState.email} placeholder="Email" type="email" onChange={onFormChange} />
-                </label>
+                <div>
+                    <TextField name="email" required label="Email" value={formState.email} placeholder="Email" type="email" onChange={onFormChange} />
+                </div>
                 <br/>
-                <label>
-                    Username: 
-                    <input name="username" value={formState.username} placeholder="Username" type="text" onChange={onFormChange} />
-                </label>
+                <div>
+                    <TextField name="username" required label="Username" value={formState.username} placeholder="Username" type="text" onChange={onFormChange} />
+                </div>
                 <br/>
-                <label>
-                    Password: 
-                    <input name="password" value={formState.password} placeholder="Password" type="password" onChange={onFormChange} />
-                </label>
+                <div>                
+                    <TextField name="password" required label="Password" value={formState.password} placeholder="Password" onChange={onFormChange}
+                    type={visible ? 'text' : 'password'} 
+                    InputProps={{
+                        endAdornment: (
+                         <InputAdornment position="end">
+                          <IconButton onClick={toggleVisibility}>
+                           {visible ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                         </InputAdornment>
+                        )
+                       }}/>
+                </div>
                 <br/>
                 <input type="submit" value="Submit" />
             </form>
