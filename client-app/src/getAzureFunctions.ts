@@ -31,5 +31,7 @@ const azureFunctionsProduction = {
 };
 
 const getAzureFunctions = () => (process.env.NODE_ENV === "development") ? azureFunctionsDevelopment : azureFunctionsProduction;
+// Comment the line above and uncomment the line below if you want to use prod endpoints in a dev environment (DO SO CAUTIOUSLY)
+//const getAzureFunctions = () => azureFunctionsProduction;
 
 export default getAzureFunctions;

@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import _ from "lodash";
 
+import styles from "./Page.module.scss";
+import monsterGif from "assets/monster_havoc.gif"
+
 import getAzureFunctions from "getAzureFunctions";
 import useFetch, { FetchStatus } from "hooks/useFetch";
 
@@ -76,6 +79,11 @@ const Game: React.FC<{subjectName: string}> = (props) => {
         } else if (questionIndex < fetchResult.payload.length) {
             return (
                 <>
+                    <img
+                        className={styles.gif}
+                        src={monsterGif}
+                        alt="Evil monster is destroying Jebraville! Solve math questions to kill the monster."
+                    />
                     <ProgressBar alpha={1 - questionIndex / fetchResult.payload.length}/>
                     <p>Question #{questionIndex + 1}:</p>
                     <Question
@@ -87,6 +95,11 @@ const Game: React.FC<{subjectName: string}> = (props) => {
         } else {
             return (
                 <>
+                    <img
+                        className={styles.gif}
+                        src={monsterGif}
+                        alt="Evil monster is destroying Jebraville! Solve math questions to kill the monster."
+                    />
                     <ProgressBar alpha={0}/>
                     <p>Congratulations, you won!</p>
                 </>
@@ -109,7 +122,7 @@ const Play: React.FC = () => {
     const [subjectName, setSubjectName] = useState<string | undefined>(undefined);
 
     return (
-        <div>
+        <div className={styles.content}>
             <h3>Play</h3>
             {
                 (subjectName === undefined)
