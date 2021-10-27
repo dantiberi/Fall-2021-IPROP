@@ -16,7 +16,8 @@ interface FetchSuccess<Model> {
 
 // Interface for failed fetch state
 interface FetchFailure {
-    status: FetchStatus.Failure
+    status: FetchStatus.Failure,
+    reason: string
 }
 
 // Interface for in-progress fetch state
@@ -37,26 +38,32 @@ const useFetch = function<Model>(request: RequestInfo, validate: (data: any) => 
             // Since we're fetching, set state to InProgress
             setFetchResult({status: FetchStatus.InProgress});
 
-            const fetchData = async () => {
-                const response = await fetch(request);
-                const json = await response.json();
-                console.log(json);
-                
-                // Validate/clean the data; if it's successful, then update state appropriately
-                const validated = validate(json);
-                if (validated !== undefined) {
-                    setFetchResult({
-                        status: FetchStatus.Success,
-                        payload: validated
-                    });
-                } else {
-                    setFetchResult({
-                        status: FetchStatus.Failure
-                    });
-                }
-            }
+            fetch(request)
+                .then(response => response.json())
+                .then(json => {
+                    console.log(json);
 
-            fetchData();
+                    // Validate/clean the data; if it's successful, then update state appropriately
+                    const validated = validate(json);
+                    if (validated !== undefined) {
+                        setFetchResult({
+                            status: FetchStatus.Success,
+                            payload: validated
+                        });
+                    } else {
+                        setFetchResult({
+                            status: FetchStatus.Failure,
+                            reason: "Unexpected JSON format"
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    setFetchResult({
+                        status: FetchStatus.Failure,
+                        reason: "Fetch error; check Console for details"
+                    });
+                });
         },
         [deps]
     );

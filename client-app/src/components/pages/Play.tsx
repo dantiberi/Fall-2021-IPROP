@@ -42,7 +42,7 @@ const SubjectSelector: React.FC<{callback: (name: string) => void}> = (props) =>
     } else if (fetchResult.status === FetchStatus.Failure) {
         // Notify user that the subjects list couldn't be fetched
         return (
-            <p>Could not fetch subjects!</p>
+            <p>Could not fetch subjects! Reason: {fetchResult.reason}</p>
         )
     } else {
         // Notify user that the subjects list is currently being fetched

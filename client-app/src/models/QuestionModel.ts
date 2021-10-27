@@ -1,8 +1,8 @@
 // Interface for Question JSON data returned from backend
 export default interface QuestionModel {
     id: number,
-    answer_a: number,
-    answer_b: number | null,
+    answer_a: string,
+    answer_b: string | null,
     question: string,
     subject_name: string
 }
@@ -16,8 +16,8 @@ export function isQuestionModel(data: any): data is QuestionModel {
 
     const questionData = data as QuestionModel;
     return typeof questionData.id === "number"
-        && typeof questionData.answer_a === "number"
-        && (typeof questionData.answer_b === "number" || questionData.answer_b === null)
+        && typeof questionData.answer_a === "string"
+        && (typeof questionData.answer_b === "string" || questionData.answer_b === null)
         && typeof questionData.question === "string"
         && typeof questionData.subject_name === "string"
 }
