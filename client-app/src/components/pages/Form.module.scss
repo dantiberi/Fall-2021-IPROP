@@ -1,0 +1,11 @@
+@import "styles/colors";
+
+.input{
+    text-align: left;
+    background-color: $light-grey;
+    border-radius: $radius;
+
+    & + & {
+        margin-top: 2rem;
+    }
+}

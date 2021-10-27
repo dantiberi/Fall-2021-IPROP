@@ -1,11 +1,11 @@
-import Question from "components/Question";
 import React from "react";
+
+import styles from "./Page.module.scss";
 
 const Home: React.FC = () => {
     return (
-        <div>
+        <div className={styles.content}>
             <h3>Home</h3>
-            <Question id={4} />
         </div>
     );
 };

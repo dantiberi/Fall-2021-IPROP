@@ -3,7 +3,7 @@ import { useState } from "react";
 type FormChangeCallback = (event: React.ChangeEvent<HTMLInputElement>) => void;
 type FormSubmitCallback = (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
 
-const useForm = function<StateType>(callback: () => Promise<void>, initialState: StateType): [StateType, FormChangeCallback, FormSubmitCallback] {
+const useForm = function<StateType>(callback: (state: StateType) => Promise<void>, initialState: StateType): [StateType, FormChangeCallback, FormSubmitCallback] {
     const [formState, setFormState] = useState(initialState);
 
     // onChange
@@ -14,7 +14,7 @@ const useForm = function<StateType>(callback: () => Promise<void>, initialState:
     // onSubmit
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        await callback(); // triggering the callback
+        await callback(formState); // triggering the callback
     };
 
     // return values

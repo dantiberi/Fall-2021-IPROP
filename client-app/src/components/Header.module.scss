@@ -1,0 +1,44 @@
+@import "styles/colors";
+
+.header {
+    background-color: $dark-grey;
+    filter: drop-shadow(4px 4px 1px rgba(0, 0, 0, 0.25));
+
+    position: absolute;
+    width: calc(100% - 40px);
+    height: 106px;
+    margin: 20px;
+    padding-right: 120px;
+    padding-left: 80px;
+    left: 0px;
+
+    border-radius: 15px;
+}
+
+.logo {
+    position: absolute;
+    width: 200px;
+    height: 100px;
+    margin-top: 45px;
+  }
+
+.menu{
+    position: absolute;
+    right: 20px;
+    justify-content: space-between;
+}
+
+.menuButton {
+    color: $light-grey;
+    font-size: 1.5em;
+    size: "30px";
+    margin-left: "38px";
+    a:hover {
+        background-color: $green;
+    }
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+}

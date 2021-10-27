@@ -11,6 +11,7 @@ import Home from "components/pages/Home";
 import Options from "components/pages/Options";
 import Login from "components/pages/Login";
 import Signup from "components/pages/Signup";
+import Play from "components/pages/Play";
 
 const App: React.FC = () => {
     return (
@@ -25,6 +26,9 @@ const App: React.FC = () => {
                 </Route>
                 <Route path="/signup">
                     <Signup />
+                </Route>
+                <Route path="/play">
+                    <Play />
                 </Route>
                 <Route path="/">
                     <Home />

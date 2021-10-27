@@ -5,3 +5,9 @@ $blue: #7289FD;
 $pink: #FF9999;
 $red: #A92C23;
 $purple: #392F5A;
+
+$radius: 3px;
+
+@function remy($value, $base: 16px) {
+    @return ($value / $base) * 1rem;
+}
