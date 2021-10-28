@@ -47,18 +47,16 @@ const Header: React.FC = () => {
     ));
 
     return (
-        <header>
-            <StyledEngineProvider injectFirst>
-                <AppBar className={styles.header}>
-                    <JebraSVG className={styles.logo} />
-                        <Toolbar className={styles.toolbar}>
-                            <div className={styles.menu}>
-                                {menuButtons}
-                            </div>
-                        </Toolbar>
-                </AppBar>
-            </StyledEngineProvider>
-        </header>
+        <StyledEngineProvider injectFirst>
+            <AppBar className={styles.header}>
+                <JebraSVG className={styles.logo} />
+                <Toolbar className={styles.toolbar}>
+                    <div className={styles.menu}>
+                        {menuButtons}
+                    </div>
+                </Toolbar>
+            </AppBar>
+        </StyledEngineProvider>
     );
 };
 
