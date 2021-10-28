@@ -1,31 +1,42 @@
 @import "styles/colors";
 
+.container {
+    display: flex; /* or inline-flex */
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: left;
+  }
+
 .header {
     background-color: $dark-grey;
     filter: drop-shadow(4px 4px 1px rgba(0, 0, 0, 0.25));
 
-    position: absolute;
+    display: flex; /* or inline-flex */
+    flex-flow: row wrap;
+    justify-content: space-between;
+
+    position: relative;
     width: calc(100% - 40px);
-    height: 106px;
+    height: 10rem;
     margin: 20px;
-    padding-right: 120px;
-    padding-left: 80px;
     left: 0px;
 
     border-radius: 15px;
 }
 
 .logo {
-    position: absolute;
-    width: 200px;
-    height: 100px;
-    margin-top: 45px;
+    height: 60%;
+    margin-left: 2rem;
+    align-self: center;
   }
 
 .menu{
-    position: absolute;
-    right: 20px;
     justify-content: space-between;
+    display: flex; /* or inline-flex */
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: left;
+    width: 34rem;
 }
 
 .menuButton {
@@ -41,4 +52,5 @@
 .toolbar {
     display: flex;
     justify-content: space-between;
+    flex-flow: row wrap;
 }
