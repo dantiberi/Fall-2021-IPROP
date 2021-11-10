@@ -29,7 +29,7 @@
 - [Suggestion] Add labels to stories to show which Sprint/Week they were assigned to, in order to know if stories are taking too long to close
 - Comment: Yes, we will be doing that.
 - [Suggestion] Everyone on the team should be writing / editing stories, and committing changes/pull requests. If you don't know how, then have someone help but everyone should be doing the basics
-- Comment: During out meeting, we have discussed about this problem and everyone now has known how to do the basics.
+- Comment: During our meeting, we have discussed about this problem and everyone now has known how to do the basics.
 
 ## Week 11 ##
  - SCRUM Lead: Nam Cong Nguyen
