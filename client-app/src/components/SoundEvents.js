@@ -6,8 +6,20 @@ export const sfxErrr = new CustomEvent('sfx', {
     }
 });
 
-export const sfxRoar = new CustomEvent('sfx', {
+export const sfxRoar1 = new CustomEvent('sfx', {
     detail: {
-        soundUrl: soundLibrary.roar
+        soundUrl: soundLibrary.roar1
+    }
+});
+
+export const sfxRoar2 = new CustomEvent('sfx', {
+    detail: {
+        soundUrl: soundLibrary.roar2
+    }
+});
+
+export const sfxRoar3 = new CustomEvent('sfx', {
+    detail: {
+        soundUrl: soundLibrary.roar3
     }
 });
