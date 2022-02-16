@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useReducer, useState } from "react";
 
 import styles from "./Game.module.scss";
 
@@ -12,6 +12,8 @@ import StageEndModel, { isStageEndModel } from "models/StageEndModel";
 import { isStageEventModel } from "models/StageEventModel";
 
 import ProgressBar from "components/ProgressBar";
+
+import SoundSystem, {playMonsterSoundEffect} from "components/pages/SoundSystem";
 
 interface StageProps {
     max_hp: number,
@@ -56,7 +58,7 @@ const Stage: React.FC<StageProps> = (props) => {
             fetch(url.toString())
                 .then(response => response.json())
                 .then(json => {
-                    console.log(json)
+                    //console.log(json)
                     if (Array.isArray(json) && json.every(isStageEventModel)) {
                         if (json.length > 0) {
                             const newHP = props.max_hp - json.map(stageEvent => stageEvent.inflicted_hp).reduce((hp1, hp2) => hp1 + hp2);
@@ -101,8 +103,41 @@ const Stage: React.FC<StageProps> = (props) => {
 
     const hp = Math.max(monsterHP, 0);
 
+    //Sound effect code below - Dan Tiberi
+    //Setup timer interval
+    //https://itnext.io/how-to-work-with-intervals-in-react-hooks-f29892d650f2
+    //Define reducer to use with useReducer hook
+    const soundEffectFrequency: number = 2500; //ms
+
+    const reducer = (state: number, action: { type: any; }) => {
+        switch (action.type) {
+            case "tick"://Run this code every time the timer goes off
+                playMonsterSoundEffect('dino1');
+                return state;//Could be used to return altered state. Not needed for the sound effect system.
+            default:
+                return state;
+        }
+    } 
+
+    const [timer, dispatchTimer] = useReducer(reducer, 0);//We wont use the timer variable. It's just here to tie the state together. We could use this setup to pass the state of timer around consistently.
+    const [useSoundEffects, setUseSoundEffects] = useState(true); //True = enable sound effects by default.
+
+    useEffect(() => {
+        const soundEffectInterval = setInterval(() => {
+            if(useSoundEffects){
+                dispatchTimer({ type: "tick" });
+            }
+        }, soundEffectFrequency);
+        return () => {
+            console.log("Clearing sound effect interval!");
+            clearInterval(soundEffectInterval);
+        }
+    }, [useSoundEffects]);
+    //Sound effect code above
+
     const contents = (
         <>
+            <SoundSystem></SoundSystem>
             <p>Course code: {props.courseCode}</p>
             <img
                 className={styles.gif}
