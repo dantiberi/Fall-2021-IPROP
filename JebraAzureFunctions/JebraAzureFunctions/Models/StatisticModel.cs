@@ -22,6 +22,9 @@ namespace JebraAzureFunctions.Models
         public int incorrect_attempt { get; set; }
         [JsonProperty]
         public string game_date { get; set; }
+        [JsonProperty]
+        public int instructor_id { get; set; }
+       
 
     }
 }
