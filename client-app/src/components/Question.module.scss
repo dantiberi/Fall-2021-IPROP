@@ -1,16 +1,21 @@
 @import "styles/colors";
 
-.correct {
+@mixin result {
+    grid-area: numpad;
+    align-self: flex-end;
     display: inline-block;
     padding: 0.5em 1em 0.5em 1em;
+    border-radius: 0.5em;
+}
+
+.correct {
+    @include result;
     background-color: $green;
     border-radius: 0.5em;
 }
 
 .incorrect {
-    display: inline-block;
-    padding: 0.5em 1em 0.5em 1em;
+    @include result;
     background-color: $red;
     color: $light-grey;
-    border-radius: 0.5em;
 }

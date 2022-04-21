@@ -8,7 +8,7 @@ interface ProgressBarProperties {
 
 const ProgressBar: React.FC<ProgressBarProperties> = (props) => {
     return (
-        <div className={styles.red}>
+        <div className={styles.red} style={{gridArea: "health"}}>
             <div className={styles.green} style={{width: `${props.alpha * 100}%`}}/>
         </div>
     );

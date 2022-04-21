@@ -1,60 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import styles from "./numpad.module.scss";
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import CheckIcon from '@mui/icons-material/Check';
-import ClearIcon from '@mui/icons-material/Clear';
-import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 
 //Link to grid layout grid.layoutit.com?id=GINfCeW
-
-/*
-Handles the input cases from each of the buttons on the number pad.
-Non-number buttons are represented using negatives.
--5 = backspace
--4 = negative
--3 = clear
--2 = submit
--1 = decimal point
-*/
-function handleNumpadButtonClick(num: number, onSubmitFunction: Function){
-    //console.log("Numpad " + num + " was pressed!")
-    var display = document.getElementsByClassName("numpad_display_text")[0];
-    var lastChar = display.innerHTML.charAt(display.innerHTML.length -1);
-    switch(num){      
-        case -1:
-            if(!(lastChar===".")){
-                display.innerHTML=display.innerHTML+".";
-            }         
-            break;
-        case -2:
-            console.log("Submit");
-            //Handle submit
-            onSubmitFunction(display.innerHTML.substring(4));
-            display.innerHTML="&gt;";
-            break;
-        case -3:
-            display.innerHTML="&gt;";
-            break;
-        case -4:
-            //console.log(display.innerHTML.charAt(display.innerHTML.length -1));           
-            //console.log(lastChar + "|" + !(lastChar === '.'));
-            if(isNaN(parseInt(lastChar)) && !(lastChar === '.')){ //Only allow - if the last number was not another number or a decimal point. Example of what this prevents: "324-3" and "3.4-4"
-                display.innerHTML=display.innerHTML+"-";
-            }
-            break;
-        case -5:
-            display.innerHTML=display.innerHTML.substring(0, display.innerHTML.length -1);
-            break;
-        default: 
-            display.innerHTML=display.innerHTML+num;
-            break;
-    }
-}
 
 interface NumpadProps {
     onSubmit(arg: string): void; //Ran when the enter key is pressed.
 }
+
+type NonNumberButton = "Dot"
+                     | "Enter"
+                     | "Clear"
+                     | "Negative"
+                     | "Backspace"
+                     | "FractionBar";
 
 /*
 Props: onSubmit = function(string)
@@ -62,79 +23,119 @@ Props: onSubmit = function(string)
  */
 const NumPad: React.FC<NumpadProps> = (props) => {
     const onSubmit = props.onSubmit;
+
+    const [answer, setAnswer] = useState("");
+
+    const handleButtonPress = useCallback((button: number | NonNumberButton) => {
+        switch(button) {      
+            case "Dot":
+                // Only add a decimal point if there are none already in the answer
+                if (!answer.includes(".")) {
+                    setAnswer(answer + ".");
+                }
+                break;
+            case "Enter":
+                console.log("Submit");
+                // Handle submit
+                onSubmit(answer);
+                setAnswer("");
+                break;
+            case "Clear":
+                setAnswer("");
+                break;
+            case "Negative":
+                if (answer.length > 0 && answer[0] === "-") { 
+                    // Change from negative to positive
+                    setAnswer(answer.substring(1));
+                } else {
+                    // Change from positive to negative
+                    setAnswer("-" + answer);
+                }
+                break;
+            case "Backspace":
+                if (answer.length > 0) {
+                    setAnswer(answer.substring(0, answer.length-1));
+                }
+                break;
+            case "FractionBar":
+                if (!answer.includes("/")) {
+                    setAnswer(answer + "/");
+                }
+                break;
+            default:
+                // button is implicitly of type 'number' here, since we've exhausted other cases above
+                setAnswer(answer + button.toString());
+                break;
+        }
+    }, [onSubmit, answer, setAnswer]);
+
     useEffect(() => {
-        // Will run once since the second parameter [] is empty. Otherwise would run every time those parameters change.
-        
         /*
         This code is used to capture keyboard input and push it to the numpad display.
         */
         //Code partially from https://javascript.plainenglish.io/how-to-detect-a-sequence-of-keystrokes-in-javascript-83ec6ffd8e93
-        document.addEventListener('DOMContentLoaded', () => {
-            let buffer: string[] = [];
-            let lastKeyTime = Date.now();
 
-            document.addEventListener('keydown', event => {
-                const currentTime = Date.now();
+        const onKeyDown = (event: KeyboardEvent) => {
+            if(!(isNaN(parseInt(event.key)))) { // If number is entered
+                console.log(event.key);
+                handleButtonPress(parseInt(event.key));
+            }
 
-                if (currentTime - lastKeyTime > 100) {
-                    buffer = [];
-                }
+            switch(event.key)
+            {
+                case 'Enter':
+                    handleButtonPress("Enter");
+                    break;
+                case '-':
+                    handleButtonPress("Negative");
+                    break;
+                case '.':
+                    handleButtonPress("Dot");
+                    break;
+                case '/':
+                    handleButtonPress("FractionBar");
+                    break;
+                case 'Backspace':
+                    handleButtonPress("Backspace");
+                    break;
+                case 'Delete':
+                    handleButtonPress("Backspace");
+                    break;
+                case ' ':
+                    handleButtonPress("Backspace");
+                    break;
+                default:
+                    break;
+            }
+        };
 
-                buffer.push(event.key);
-                lastKeyTime = currentTime;
+        document.addEventListener('keydown', onKeyDown);
 
-                if(!(isNaN(parseInt(event.key)))){ //If number is entered
-                    handleNumpadButtonClick(parseInt(event.key), onSubmit);
-                }
+        return () => document.removeEventListener('keydown', onKeyDown);
+    }, [handleButtonPress]);
 
-                switch(event.key)
-                {
-                    case 'Enter':
-                        handleNumpadButtonClick(-2, onSubmit);
-                        break;
-                    case '-':
-                        handleNumpadButtonClick(-4, onSubmit);
-                        break;
-                    case '.':
-                        handleNumpadButtonClick(-1, onSubmit);
-                        break;
-                    case 'Backspace':
-                        handleNumpadButtonClick(-3, onSubmit);
-                        break;
-                    case 'Delete':
-                        handleNumpadButtonClick(-5, onSubmit);
-                        break;
-                    case ' ':
-                        handleNumpadButtonClick(-5, onSubmit); //Space is same as delete
-                        break;
-                    default:
-                        break;
-                }
-                //console.log(buffer);
-                //console.log(event.key === 'Delete');
-            }); 
-        });
-    }, []);
+    const buttonStyle = (style: string) => [styles.numpad_button, style].join(" ");
     
     return (
-        <div>
-            <div className={styles.numpad_container}>
-                <span className={styles.numpad_display}><h3 className="numpad_display_text" onClick={() =>handleNumpadButtonClick(-5, onSubmit)}>&gt;</h3></span>            
-                <button onClick={() =>handleNumpadButtonClick(7, onSubmit)} className={[styles.num7, styles.numpad_button].join(" ")}>7</button>
-                <button onClick={() =>handleNumpadButtonClick(8, onSubmit)} className={[styles.num8, styles.numpad_button].join(" ")}>8</button>
-                <button onClick={() =>handleNumpadButtonClick(9, onSubmit)} className={[styles.num9, styles.numpad_button].join(" ")}>9</button>
-                <button onClick={() =>handleNumpadButtonClick(4, onSubmit)} className={[styles.num4, styles.numpad_button].join(" ")}>4</button>
-                <button onClick={() =>handleNumpadButtonClick(5, onSubmit)} className={[styles.num5, styles.numpad_button].join(" ")}>5</button>
-                <button onClick={() =>handleNumpadButtonClick(6, onSubmit)} className={[styles.num6, styles.numpad_button].join(" ")}>6</button>
-                <button onClick={() =>handleNumpadButtonClick(1, onSubmit)} className={[styles.num1, styles.numpad_button].join(" ")}>1</button>
-                <button onClick={() =>handleNumpadButtonClick(2, onSubmit)} className={[styles.num2, styles.numpad_button].join(" ")}>2</button>
-                <button onClick={() =>handleNumpadButtonClick(3, onSubmit)} className={[styles.num3, styles.numpad_button].join(" ")}>3</button>
-                <button onClick={() =>handleNumpadButtonClick(0, onSubmit)} className={[styles.num0, styles.numpad_button].join(" ")}>0</button>
-                <button onClick={() =>handleNumpadButtonClick(-1, onSubmit)} className={[styles.numdot, styles.numpad_button].join(" ")}><FiberManualRecordIcon sx={{ fontSize: "75%" }} /></button>
-                <button onClick={() =>handleNumpadButtonClick(-2, onSubmit)} className={[styles.numenter, styles.numpad_button].join(" ")}><span><CheckIcon sx={{ fontSize: "140%"}} /></span></button>
-                <button onClick={() =>handleNumpadButtonClick(-3, onSubmit)} className={[styles.numclear, styles.numpad_button].join(" ")}>C</button>
-                <button onClick={() =>handleNumpadButtonClick(-4, onSubmit)} className={[styles.numneg, styles.numpad_button].join(" ")}>-</button>
-            </div>
+        <div className={styles.numpad_container}>
+            <span className={styles.numpad_display}>
+                <h3 className="numpad_display_text" onClick={() =>handleButtonPress("Backspace")}>&gt;{answer}</h3>
+            </span>            
+            <button onClick={() => handleButtonPress(7)} className={buttonStyle(styles.num7)}>7</button>
+            <button onClick={() => handleButtonPress(8)} className={buttonStyle(styles.num8)}>8</button>
+            <button onClick={() => handleButtonPress(9)} className={buttonStyle(styles.num9)}>9</button>
+            <button onClick={() => handleButtonPress(4)} className={buttonStyle(styles.num4)}>4</button>
+            <button onClick={() => handleButtonPress(5)} className={buttonStyle(styles.num5)}>5</button>
+            <button onClick={() => handleButtonPress(6)} className={buttonStyle(styles.num6)}>6</button>
+            <button onClick={() => handleButtonPress(1)} className={buttonStyle(styles.num1)}>1</button>
+            <button onClick={() => handleButtonPress(2)} className={buttonStyle(styles.num2)}>2</button>
+            <button onClick={() => handleButtonPress(3)} className={buttonStyle(styles.num3)}>3</button>
+            <button onClick={() => handleButtonPress(0)} className={buttonStyle(styles.num0)}>0</button>
+            <button onClick={() => handleButtonPress("Dot")} className={buttonStyle(styles.numdot)}><FiberManualRecordIcon sx={{ fontSize: "75%" }} /></button>
+            <button onClick={() => handleButtonPress("Enter")} className={buttonStyle(styles.numenter)}><span><CheckIcon sx={{ fontSize: "140%"}} /></span></button>
+            <button onClick={() => handleButtonPress("Clear")} className={buttonStyle(styles.numclear)}>C</button>
+            <button onClick={() => handleButtonPress("Negative")} className={buttonStyle(styles.numneg)}>-</button>
+            <button onClick={() => handleButtonPress("FractionBar")} className={buttonStyle(styles.numfrac)}>/</button>
         </div>
     );
 };

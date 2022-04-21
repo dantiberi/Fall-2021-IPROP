@@ -1,4 +1,9 @@
 @import "styles/colors";
+@import "styles/media";
+
+.svg {
+    @include media;
+}
 
 .triangleFill {
     fill: $blue;
@@ -19,6 +24,10 @@
     font-size: 1.1em;
     font-weight: 500;
     fill: $dark-blue;
+
+    @media (max-width: 1000px) {
+        font-size: 1.8em;
+    }
 }
 
 // I keep separate classes for side length labels and angle labels

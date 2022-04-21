@@ -1,0 +1,13 @@
+@mixin media {
+    grid-area: media;
+
+    width: auto;
+    max-width: 80%;
+    max-height: 40vh;
+
+    @media (max-width: 1000px) {
+        width: auto;
+        max-width: 65%;
+        max-height: 25vh;
+    }
+}

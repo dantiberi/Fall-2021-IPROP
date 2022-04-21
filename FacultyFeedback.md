@@ -37,15 +37,35 @@
 
 
 ## Week 9 ##
+- I liked the clarity of Calculus and trig questions, teacher statistics for their students, accessiblity
+
 
 ## Week 10 ##
 
 
 ## Week 11 ##
+- We are not doing  innovation day (4/29) instead we are doing to Audience Choice Competition - pitch competition day on (4/22)
+- Martin to check on Jebra's opportunity to pitch
+- Think about your name.   Are you staying with the current name?
 
 ## Week 12 ##
+- Make sure activities for audience choice and various other deadlines I shared in email are represented on your board
+- Chris Converse #165 in progress
+- Daniel T. #124 in progress
+- Emily #190 in progress
+- Khiem - #191 in progress
+- Nam - #192 in progress
+- Tommy - #172 in progress
 
-## Week 13 Nov 16 ##
+## Week 13 ##
+- April 15th submit form and 90 second video for audience choice award
+- April 19th - dry run of class presentation and demo
+- April  22nd - audience choice and broader pitch event from 2:00 PM to 5:00 PM
+	- This mandatory and required
+- April 26th - final class presentation and demo
+- Make sure you create your video as an .mp4
+- Make sure to pull, push and merge
+
 
 - Final Presentation Dry Run
 

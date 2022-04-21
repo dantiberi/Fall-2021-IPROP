@@ -1,0 +1,32 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    align-items: stretch;
+}
+
+#root {
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+}
+
+.app {
+    width: 100%;
+    overflow-x: hidden;
+    //overflow-y: hidden;
+
+    margin: 0;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 2rem;
+    @media (max-width: 1000px) {
+        padding: 1rem;
+        gap: 1rem;
+    }
+}

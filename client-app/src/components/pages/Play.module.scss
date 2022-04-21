@@ -1,0 +1,43 @@
+/*
+    Desktop:
+        - Monster/diagram on left with healthbar underneath
+        - Question on the right with numpad underneath
+
+    Mobile:
+        - No monster
+        - Healthbar at top
+        - Question underneath
+        - Numpad underneath
+
+    Both:
+        - Don't show course code or player count; only on teacher's view
+*/
+
+.content {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(4, auto);
+
+    grid-template-areas: 
+        "media  question"
+        "media  numpad"
+        "media  numpad"
+        "health numpad";
+
+    @media (max-width: 1000px) {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto 1fr;
+
+        grid-template-areas:
+            "health"
+            "media"
+            "question"
+            "numpad";
+    }
+}
+
+.content > * {
+    justify-self: center;
+    align-self: center;
+}

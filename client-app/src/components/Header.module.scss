@@ -1,6 +1,6 @@
 @import "styles/colors";
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 1000px) {
     .header {
         background-color: $green;
     }
@@ -22,17 +22,19 @@
 
 .logoDesktop {
     width: 20%;
+    max-height: 80%;
     margin-left: 2rem;
     align-self: center;
 }
 
 .logoMobile {
     width: 25%;
+    max-height: 80%;
     align-self: center;
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    flex-grow: 1;
+    //position: fixed;
+    //left: 50%;
+    //transform: translate(-50%, 0);
 }
 
 .menu {

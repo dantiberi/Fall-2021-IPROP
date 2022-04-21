@@ -13,11 +13,11 @@ import InstructorPortal from "components/pages/InstructorPortal";
 import Signup from "components/pages/Signup";
 import StudentPortal from "components/pages/StudentPortal";
 
-import styles from "./App.module.scss";
+import "./App.scss";
 
 const App: React.FC = () => {
     return (
-        <div className={styles.app}>
+        <div className={"app"}>
             <Router>
                 <Header />
                 <Switch>

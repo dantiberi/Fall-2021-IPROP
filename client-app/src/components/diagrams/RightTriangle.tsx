@@ -22,7 +22,7 @@ interface Vertex {
 }
 
 const TRIANGLE_WIDTH = 400; // Not actual pixels, the SVG viewport can be scaled responsively
-const PADDING = 32;         // Padding around the triangle so that the text doesn't get clipped
+const PADDING = 40;         // Padding around the triangle so that the text doesn't get clipped
 
 // Offset for text labels depending on alignment
 const TEXT_OFFSET_X = {
@@ -163,8 +163,11 @@ const RightTriangle: React.FC<RightTriangleProps> = props => {
     vectorLeft  = { x:  vectorLeft.x /  magnitudeLeft * arcRadius, y:  vectorLeft.y /  magnitudeLeft * arcRadius};
     vectorRight = { x: vectorRight.x / magnitudeRight * arcRadius, y: vectorRight.y / magnitudeRight * arcRadius};
 
+    const viewWidth = TRIANGLE_WIDTH + 2*PADDING;
+    const viewHeight = height + 2*PADDING;
+
     return (
-        <svg width={TRIANGLE_WIDTH + 2*PADDING} height={height + 2*PADDING}>
+        <svg className={styles.svg} viewBox={`0 0 ${viewWidth} ${viewHeight}`}>
             <polygon
                 className={styles.triangleFill}
                 points={points}

@@ -2,7 +2,12 @@
     background-color: #E8ECED;
     color: #FF9999;
     border: 3px solid #FF9999;
-    font-size: 150%;
+    font-size: 125%;
+
+    @media (min-width: 500px) {
+      font-size: 150%;
+    }
+
     border-radius: 8px;
     box-shadow: 2px 2px 2px rgb(115, 115, 115);
 }
@@ -50,18 +55,24 @@
 
 .numpad_container {
   display: grid; 
-  grid-auto-columns: 1fr; 
-  grid-template-columns: 12vw 12vw 12vw 12vw 12vw; 
-  grid-template-rows: 12vw 12vw 12vw 12vw 12vw 12vw; 
-  gap: 2vw 2vw; 
+
+  grid-template-columns: repeat(4, 1fr); 
+  grid-template-rows: repeat(5, 1fr);
+
+  gap: 2% 2%; 
+
   grid-template-areas: 
-    ". disp disp disp ."
-    ". num7 num8 num9 ."
-    ". num4 num5 num6 numneg"
-    ". num1 num2 num3 numclear"
-    ". numenter num0 numdot numclear"
-    ". numclearMobile numclearMobile numnegMobile ."; 
-  width: fit-content;
+      "disp disp disp disp"
+      "num7 num8 num9 numneg"
+      "num4 num5 num6 numfrac"
+      "num1 num2 num3 numclear"
+      "numenter num0 numdot numclear";
+    
+  width: 100%;
+  height: 100%;
+
+  // This is for the whole game's grid layout 
+  grid-area: numpad;
 }
 .num7 { grid-area: num7; }
 .num8 { grid-area: num8; }
@@ -74,7 +85,8 @@
 .num3 { grid-area: num3; }
 .num0 { grid-area: num0; }
 .numdot { grid-area: numdot; }
-.numneg { grid-area: numnegMobile; }
+.numneg { grid-area: numneg; }
+.numfrac { grid-area: numfrac; }
 
 .numenter { 
   grid-area: numenter; 
@@ -93,7 +105,7 @@
 }
 
 .numclear { 
-  grid-area: numclearMobile; 
+  grid-area: numclear; 
   color: #FF0000;
   width: auto;
 }
@@ -137,16 +149,14 @@
   }
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 500px) {
   .numpad_container {
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr; 
-    grid-template-rows: 4em 4em 4em 4em 4em 4em; 
     gap: 1vw 1vw; 
+    width: 50%;
+    height: 80%;
   }
 
-  .numclear { 
-    grid-area: numclear; 
-  }
+  //.numclear { grid-area: numclear; }
 
-  .numneg { grid-area: numneg; }
+  //.numneg { grid-area: numneg; }
 }

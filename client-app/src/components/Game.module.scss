@@ -1,5 +1,8 @@
+
+@import "styles/media";
+
 .gif {
-    width: 40vmin;
+    @include media;
 }
 
 .code{
