@@ -31,13 +31,6 @@
             <param name="log"></param>
             <returns></returns>
         </member>
-        <member name="T:JebraAzureFunctions.PublishStatisticForStage">
-            <summary>
-            When calling this function, you are required to provide values for each column asked of in the model.
-            This means that in order to update one field, such a score, you must first retrieve the existing values
-            of the other fields, first_time_correct and total_retries, in order to not overwrite the existing values.
-            </summary>
-        </member>
         <member name="M:JebraAzureFunctions.Questions.Trigonometry.CalculateGCD(System.Int32,System.Int32)">
             <summary>
             Calculates the GCD of two positive integers using the Euclidean algorithm
