@@ -12,6 +12,7 @@ import StageEndModel from "models/StageEndModel";
 import getAzureFunctions from "getAzureFunctions";
 
 import Fade from '@mui/material/Fade';
+import StatsPage from "./StatsPage";
 
 interface CourseMonitorProps {
     instructorData: InstructorModel
