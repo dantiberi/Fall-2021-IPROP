@@ -117,10 +117,10 @@ const StatsPage: React.FC<statProps> = (props) => {
     
                 {Array.from(statMap, ([email, emailStats]) => (
                     <Grid container>
-                        <Grid item xs={3}>
+                        <Grid item xs={2}>
                             <p>{email}</p>
                         </Grid>
-                        <Grid item xs={9}>
+                        <Grid item xs={10}>
                             <PieCharts
                                 data={
                                     Array.from(emailStats, ([subjectName, [correct, incorrect]]) => ({
