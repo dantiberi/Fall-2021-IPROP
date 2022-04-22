@@ -16,6 +16,7 @@ import StatsPage from "./StatsPage";
 import useFetch, { FetchStatus } from "hooks/useFetch";
 import { isSubjectModel } from "models/SubjectModel";
 import LoadingAnimation from "components/LoadingAnimation";
+import Styles from "./CourseMonitorStyles.module.scss";
 
 interface CourseMonitorProps {
     instructorData: InstructorModel
@@ -100,7 +101,7 @@ const CourseMonitor: React.FC<CourseMonitorProps> = props => {
             if (page === "Stats") {
                 contents = (
                     <>
-                        <button onClick={() => setPage("StartGame")}>Start Game</button>
+                        <button className={Styles.start_game_button} onClick={() => setPage("StartGame")}>Start Game</button>
                         <StatsPage
                             instructor_id={props.instructorData.id}
                             subjects={subjectFetchResult.payload}

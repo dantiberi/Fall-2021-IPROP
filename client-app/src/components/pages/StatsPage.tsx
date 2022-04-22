@@ -12,6 +12,8 @@ import useFetch, { FetchStatus } from "hooks/useFetch";
 import { isStatisticModel } from "models/StatisticModel";
 import LoadingAnimation from "components/LoadingAnimation";
 
+import Styles from "./CourseMonitorStyles.module.scss";
+
 interface statProps {
     instructor_id: number,
     subjects: SubjectModel[]
@@ -84,13 +86,14 @@ const StatsPage: React.FC<statProps> = (props) => {
         //     ]);
 
         return (
-            <div>
-                <span>Subject</span>
+            <div className={Styles.stat_selector_container}>
+                <span className={Styles.stat_selector_item}>Subject</span>
                 <Select
                     label="Subject"
                     style={{width: 80}}
                     onChange={handleChangeSubjectName}
                     value={subjectName}
+                    className={Styles.stat_selector_item}
                 >
                     <MenuItem value={""}>
                         <em>All</em>
@@ -100,8 +103,8 @@ const StatsPage: React.FC<statProps> = (props) => {
                     ))}
                 </Select>
     
-                <span>Student</span>
-                <Select
+                <span className={Styles.stat_selector_item} >Student</span>
+                <Select className={Styles.stat_selector_item}
                     label="Student"
                     style={{width: 80}}
                     onChange={handleChangeStudentEmail}
