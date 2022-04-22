@@ -45,12 +45,12 @@ namespace JebraAzureFunctions
             //System.Diagnostics.Debug.WriteLine(Tools.GetSubjectIdFromCourseId(int.Parse(instructor_id)).GetAwaiter().GetResult());
 
             //I know its hacky but we are running out of time :(
-            string subjectIdS = Tools.GetSubjectIdFromCourseId(instructor_id).GetAwaiter().GetResult();
+            string subjectIdS = Tools.GetSubjectIdFromCourseId(course_id).GetAwaiter().GetResult();
             subjectIdS = subjectIdS.Substring(1, subjectIdS.Length - 2);// Remove [ ]
             int subject_id = JsonConvert.DeserializeObject<JustASubjectId>(subjectIdS).subject_id;
 
             //Get users
-            dynamic allUsers = JsonConvert.DeserializeObject(Tools.GetAllUsersInCourse(instructor_id).GetAwaiter().GetResult());
+            dynamic allUsers = JsonConvert.DeserializeObject(Tools.GetAllUsersInCourse(course_id).GetAwaiter().GetResult());
 
             List<StatisticModel> toPush = new List<StatisticModel>();
 
@@ -63,7 +63,7 @@ namespace JebraAzureFunctions
 
                 //Get all stage events for this user in that course:
                 string stageEventsCommand = @$"
-                    SELECT stage_event.inflicted_hp, stage_event.was_correct, stage_event_join.instructor_id FROM stage_event 
+                    SELECT stage_event.inflicted_hp, stage_event.was_correct FROM stage_event
                     INNER JOIN stage_event_join ON stage_event.id = stage_event_join.stage_event_id
                     WHERE stage_event_join.course_id = {course_id} and stage_event_join.origin_user_id = {user.user_id};
                 ";
@@ -94,7 +94,7 @@ namespace JebraAzureFunctions
                 System.Diagnostics.Debug.WriteLine($"subject_id: {subject_id}");
                 System.Diagnostics.Debug.WriteLine($"instructor_id: {instructor_id}");
                 System.Diagnostics.Debug.WriteLine($"user.id: {user.user_id}");
-                System.Diagnostics.Debug.WriteLine($"correct_attempt: {instructor_id}");
+                System.Diagnostics.Debug.WriteLine($"correct_attempt: {correctAttempt}");
                 System.Diagnostics.Debug.WriteLine($"incorrect_attempt: {incorrectAttempt}");
                 System.Diagnostics.Debug.WriteLine($"date: {DateTime.UtcNow.ToString("MM-dd-yyyy")}");
                 System.Diagnostics.Debug.WriteLine("=========================================");

@@ -4,11 +4,10 @@ USE [Jebra];
 -- They are dropped in an order such that foreign key constraint errors are avoided.
 DROP TABLE IF EXISTS [dbo].course_assignment;
 DROP TABLE IF EXISTS [dbo].stage_event_join;
-DROP TABLE IF EXISTS [dbo].statistic_join;
 DROP TABLE IF EXISTS [dbo].course;
+DROP TABLE IF EXISTS [dbo].statistic;
 DROP TABLE IF EXISTS [dbo].instructor;
 DROP TABLE IF EXISTS [dbo].app_user;
-DROP TABLE IF EXISTS [dbo].statistic;
 DROP TABLE IF EXISTS [dbo].stage_event;
 DROP TABLE IF EXISTS [dbo].question;
 DROP TABLE IF EXISTS [dbo].stage;
@@ -32,14 +31,6 @@ CREATE TABLE [dbo].instructor (
 );
 -- Sample instructor
 INSERT INTO [dbo].instructor VALUES ('Al', 'Jebra', 'aj', 'jebraiscool123', 'aj@jebra.com');
-
-CREATE TABLE [dbo].statistic (
-	id					INT				NOT NULL	IDENTITY,
-	first_time_correct	INT,
-	total_retries		INT,
-	score				FLOAT,
-	PRIMARY KEY (id)
-);
 
 CREATE TABLE [dbo].subject (
 	id					INT				NOT NULL	IDENTITY,
@@ -82,6 +73,21 @@ CREATE TABLE [dbo].course (
 -- Sample course
 INSERT INTO [dbo].course VALUES ('Algebra 1', 12345, 1);
 
+CREATE TABLE [dbo].statistic (
+	id					INT				NOT NULL	IDENTITY,
+	score				FLOAT			NOT NULL,
+	subject_id			INT				NOT NULL,
+	user_id				INT				NOT NULL,
+	correct_attempt		INT				NOT NULL,
+	incorrect_attempt	INT				NOT NULL,
+	game_date			DATE			NOT NULL,
+	instructor_id		INT				NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (user_id) REFERENCES [dbo].app_user(id),
+	FOREIGN KEY (subject_id) REFERENCES [dbo].subject(id),
+	FOREIGN KEY (instructor_id) REFERENCES [dbo].instructor(id)
+);
+
 CREATE TABLE [dbo].course_assignment (
 	id					INT				NOT NULL	IDENTITY,
 	user_id				INT,
@@ -94,19 +100,6 @@ CREATE TABLE [dbo].course_assignment (
 );
 -- Assign sample instructor to sample course
 INSERT INTO [dbo].course_assignment VALUES (NULL, 1, 1);
-
-CREATE TABLE [dbo].statistic_join (
-	id					INT				NOT NULL	IDENTITY,
-	user_id				INT				NOT NULL,
-	course_id			INT				NOT NULL,
-	stage_id			INT				NOT NULL,
-	statistic_id		INT				NOT NULL,
-	PRIMARY KEY (id),
-	FOREIGN KEY (user_id) REFERENCES [dbo].app_user(id),
-	FOREIGN KEY (course_id) REFERENCES [dbo].course(id),
-	FOREIGN KEY (stage_id) REFERENCES [dbo].stage(id),
-	FOREIGN KEY (statistic_id) REFERENCES [dbo].statistic(id)
-);
 
 CREATE TABLE [dbo].question (
 	id					INT				NOT NULL	IDENTITY,
