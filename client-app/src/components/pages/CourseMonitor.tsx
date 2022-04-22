@@ -53,21 +53,25 @@ const CourseMonitor: React.FC<CourseMonitorProps> = props => {
     const endGameRequest = useCallback(
         () => setGameData(oldGameData => {
             if (oldGameData !== undefined) {
-                const url = new URL(getAzureFunctions().EndGame);
-                url.searchParams.append("courseId", oldGameData.course_id.toString());
-                url.searchParams.append("stageId", oldGameData.stage_id.toString());
+                const pushStatUrl = new URL(getAzureFunctions().PushStatistic);
+                pushStatUrl.searchParams.append("instructor_id", props.instructorData.id.toString());
 
-                const requestInfo: RequestInit = { method: "PUT" };
+                const endGameUrl = new URL(getAzureFunctions().EndGame);
+                endGameUrl.searchParams.append("courseId", oldGameData.course_id.toString());
+                endGameUrl.searchParams.append("stageId", oldGameData.stage_id.toString());
 
-                fetch(url.toString(), requestInfo)
+                fetch(pushStatUrl.toString(), { method: "POST" })
                     .then(response => response.text())
-                    .then(text => {console.log(text);})
-                    .catch(err => {console.error(err);});
+                    .then(text => console.log(text))
+                    .then(() => fetch(endGameUrl.toString(), { method: "PUT" }))
+                    .then(response => response.text())
+                    .then(text => console.log(text))
+                    .catch(err => console.log(err));
             }
 
             return undefined;
         }),
-        [setGameData]
+        [setGameData, props.instructorData.id]
     )
 
     let contents: JSX.Element;
