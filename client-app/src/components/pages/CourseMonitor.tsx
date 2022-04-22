@@ -12,12 +12,30 @@ import StageEndModel from "models/StageEndModel";
 import getAzureFunctions from "getAzureFunctions";
 
 import Fade from '@mui/material/Fade';
+import StatsPage from "./StatsPage";
+import useFetch, { FetchStatus } from "hooks/useFetch";
+import { isSubjectModel } from "models/SubjectModel";
+import LoadingAnimation from "components/LoadingAnimation";
 
 interface CourseMonitorProps {
     instructorData: InstructorModel
 }
 
 const CourseMonitor: React.FC<CourseMonitorProps> = props => {
+    // Fetch the subjects
+    const subjectFetchResult = useFetch(
+        getAzureFunctions().GetSubjects,
+        (data) => {
+            // The Azure function should return the data as an array of SubjectModels
+            if (Array.isArray(data) && data.every(isSubjectModel)) {
+                return data;
+            }
+            return undefined;
+        },
+        []
+    );
+
+    const [page, setPage] = useState<"Stats" | "StartGame">("Stats");
     const [gameData, setGameData] = useState<NewGameResponseModel | undefined>(undefined);
 
     const onStageFinish = useCallback(
@@ -77,25 +95,57 @@ const CourseMonitor: React.FC<CourseMonitorProps> = props => {
 
     let contents: JSX.Element;
 
-    if (gameData === undefined) {
+    if (subjectFetchResult.status === FetchStatus.Success) {
+        if (gameData === undefined) {
+            if (page === "Stats") {
+                contents = (
+                    <>
+                        <button onClick={() => setPage("StartGame")}>Start Game</button>
+                        <StatsPage
+                            instructor_id={props.instructorData.id}
+                            subjects={subjectFetchResult.payload}
+                        />
+                    </>
+                );
+            } else {
+                contents = (
+                    <>
+                        <button onClick={() => setPage("Stats")}>View Stats</button>
+                        <CourseCreationForm
+                            instructorData={props.instructorData}
+                            onCourseCreated={setGameData}
+                            subjects={subjectFetchResult.payload}
+                        />
+                    </>
+                );
+            }
+        } else {
+            contents = (
+                <>
+                    <Stage
+                        max_hp={gameData.max_hp}
+                        stageId={gameData.stage_id}
+                        stageName={gameData.name}
+                        courseCode={gameData.code.toString()}
+                        winMessage={"Your brilliant students have defeated the monster! Moving onto next stage..."}
+                        onStageFinish={onStageFinish}
+                        onCourseFinish={onCourseFinish}
+                        courseId={gameData.course_id}
+                    />
+                    <button onClick={endGameRequest}>End Game</button>
+                </>
+            );
+        }
+    } else if (subjectFetchResult.status === FetchStatus.InProgress) {
         contents = (
-            <CourseCreationForm instructorData={props.instructorData} onCourseCreated={setGameData}/>
+            <>
+                <p>Fetching subjects list...</p>
+                <LoadingAnimation />
+            </>
         );
     } else {
         contents = (
-            <>
-                <Stage
-                    max_hp={gameData.max_hp}
-                    stageId={gameData.stage_id}
-                    stageName={gameData.name}
-                    courseCode={gameData.code.toString()}
-                    winMessage={"Your brilliant students have defeated the monster! Moving onto next stage..."}
-                    onStageFinish={onStageFinish}
-                    onCourseFinish={onCourseFinish}
-                    courseId={gameData.course_id}
-                />
-                <button onClick={endGameRequest}>End Game</button>
-            </>
+            <p>Failed to fetch subject list! Reason: {subjectFetchResult.reason}</p>
         );
     }
 
