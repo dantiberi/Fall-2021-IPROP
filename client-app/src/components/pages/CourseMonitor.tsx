@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import styles from "./Page.module.scss"
 
@@ -51,24 +51,23 @@ const CourseMonitor: React.FC<CourseMonitorProps> = props => {
     );
 
     const endGameRequest = useCallback(
-        () => {
-            if (gameData === undefined)
-                return;
-            
-            const url = new URL(getAzureFunctions().EndGame);
-            url.searchParams.append("courseId", gameData.course_id.toString());
-            url.searchParams.append("stageId", gameData.stage_id.toString());
+        () => setGameData(oldGameData => {
+            if (oldGameData !== undefined) {
+                const url = new URL(getAzureFunctions().EndGame);
+                url.searchParams.append("courseId", oldGameData.course_id.toString());
+                url.searchParams.append("stageId", oldGameData.stage_id.toString());
 
-            const requestInfo: RequestInit = { method: "PUT" };
+                const requestInfo: RequestInit = { method: "PUT" };
 
-            fetch(url.toString(), requestInfo)
-                .then(response => response.text())
-                .then(text => {console.log(text);})
-                .catch(err => {console.error(err);});
-            
-            setGameData(undefined);
-        },
-        [gameData]
+                fetch(url.toString(), requestInfo)
+                    .then(response => response.text())
+                    .then(text => {console.log(text);})
+                    .catch(err => {console.error(err);});
+            }
+
+            return undefined;
+        }),
+        [setGameData]
     )
 
     let contents: JSX.Element;
@@ -95,16 +94,24 @@ const CourseMonitor: React.FC<CourseMonitorProps> = props => {
         );
     }
 
-    //Code to call endGameRequest when the window closes or component unmounts - Dan Tiberi
-    window.onbeforeunload = async function (e) { //On window close
-        await endGameRequest();
-        e.returnValue = 'onbeforeunload';
-        return 'onbeforeunload';
-    };
-    React.useEffect(() => () => { //On component unmount (Goto another page)
-        endGameRequest();
-    }, [endGameRequest]);
-    //End
+    // This effect attaches/detaches the beforeunload event listener if there is a current game
+    useEffect(() => {
+        if (gameData !== undefined) {
+            const listener = (e: BeforeUnloadEvent) => {
+                e.preventDefault(); // Shows prompt on Firefox
+                e.returnValue = ''; // Shows prompt on Chrome
+                endGameRequest();
+            };
+    
+            window.addEventListener('beforeunload', listener);
+            return () => {
+                window.removeEventListener('beforeunload', listener);
+            }
+        }
+    }, [gameData, endGameRequest])
+
+    // This effect is fired ONLY when the component fully unmounts, ending the current game if it exists
+    useEffect(() => () => endGameRequest(), [endGameRequest]);
 
     return (
         <Fade in={true} timeout={500}>

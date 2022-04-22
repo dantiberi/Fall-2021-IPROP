@@ -85,21 +85,11 @@ const Play: React.FC<PlayProps> = props => {
             window.addEventListener('beforeunload', listener);
             return () => {
                 window.removeEventListener('beforeunload', listener);
+                removePlayer();
             }
         },
         [removePlayer]
     );
-
-    window.onbeforeunload = async function (e) {
-        await removePlayer();
-        e.returnValue = 'onbeforeunload';
-        return 'onbeforeunload';
-    };
-        
-    // Remove player from game when component unmounts.
-    React.useEffect(() => () => {
-        removePlayer();
-    }, [removePlayer]);
 
     return (
         <Fade in={true} timeout={500}>

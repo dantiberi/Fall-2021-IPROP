@@ -41,18 +41,18 @@ const useStyles = makeStyles(() => ({
         backgroundColor: "#262F34",
         filter: "drop-shadow(4px 4px 1px rgba(0, 0, 0, 0.25))",
         borderRadius: "15px",
-        display: "flex",
-        flexFlow: "row wrap",
+        //display: "flex",
+        //flexFlow: "row wrap",
         position: "relative",
         height: "5rem",
         paddingLeft: "5rem",
         paddingRight: "5rem",
-        justifyContent: "space-between",
+        //justifyContent: "space-between",
         "@media (max-width: 1000px)": {
             height: "3.5rem",
             paddingLeft: "2rem",
             paddingRight: "2rem",
-            justifyContent: "start",
+            //justifyContent: "start",
         },
     },
     menuButton: {
@@ -63,7 +63,11 @@ const useStyles = makeStyles(() => ({
     },
     toolbar: {
         display: "flex",
-        justifyContent: "space-evenly",
+        justifyContent: "start",
+        height: "100%",
+        "@media (max-width: 1000px)": {
+            justifyContent: "space-between",
+        },
     },
     drawerContainer: {
         padding: "20px 30px",
@@ -82,7 +86,7 @@ export default function Header() {
 
     useEffect(() => {
         const setResponsiveness = () => {
-        return window.innerWidth < 900
+        return window.innerWidth < 1000
             ? setState((prevState) => ({ ...prevState, mobileView: true }))
             : setState((prevState) => ({ ...prevState, mobileView: false }));
         };
