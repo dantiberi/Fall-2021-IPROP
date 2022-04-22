@@ -54,6 +54,7 @@ const CourseMonitor: React.FC<CourseMonitorProps> = props => {
         () => setGameData(oldGameData => {
             if (oldGameData !== undefined) {
                 const pushStatUrl = new URL(getAzureFunctions().PushStatistic);
+                pushStatUrl.searchParams.append("course_id", oldGameData.course_id.toString());
                 pushStatUrl.searchParams.append("instructor_id", props.instructorData.id.toString());
 
                 const endGameUrl = new URL(getAzureFunctions().EndGame);
