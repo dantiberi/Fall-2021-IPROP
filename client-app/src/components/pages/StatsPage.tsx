@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 
-import styles from "./Page.module.scss"
-import Fade from '@mui/material/Fade';
 import PieCharts from 'components/diagrams/PieCharts'
-import { Grid, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
+
 import getAzureFunctions from "getAzureFunctions";
 
 const stats = [
@@ -36,12 +38,12 @@ const subjects = [
 ]
 
 interface statProps {
-    instructor_id : string
+    instructor_id : number
 }
 const StatsPage: React.FC<statProps> = (props) => {
     const url = new URL(getAzureFunctions().GetStatistic);
         // Store course code in a variable since we use it later (and it may change since it's after the PUT request)
-    url.searchParams.append("instructor_id", props.instructor_id);
+    url.searchParams.append("instructor_id", props.instructor_id.toString());
 
     const requestInfo: RequestInit = { method: "GET" };
 
@@ -66,9 +68,6 @@ const StatsPage: React.FC<statProps> = (props) => {
     };
     return (
         <div>
-            <h3>Options</h3>
-            <p>Options will be added soon</p>
-
             <span>Subject</span>
             <Select
                 label="Subject"
